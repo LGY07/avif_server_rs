@@ -1,0 +1,73 @@
+#################################
+# Server Configuration
+#################################
+[server]
+
+# Bind address
+bind = "127.0.0.1"
+
+# Port to listen on
+port = 8080
+
+# Enable or disable caching
+cache_enabled = true
+
+# Directory to store cached images
+cache_dir = "./cache"
+
+# Cache Time-To-Live in seconds
+cache_ttl_secs = 3600
+
+# Maximum total cache size in MB
+cache_max_mb = 1024
+
+# Default output format when request has no 'format' parameter.
+# Supported: "webp", "avif". Falls back to AVIF if invalid.
+default_format = "avif"
+
+#################################
+# AVIF Encoding Configuration
+#################################
+[avif]
+
+# Quality of AVIF encoding (0-100)
+# Higher values improve image quality but increase file size.
+quality = 60
+
+# Speed of AVIF encoding (0-10)
+# 0 = slowest / best compression
+# 10 = fastest / larger file
+speed = 8
+
+# Number of threads used for encoding
+# Increasing threads can improve performance on multi-core CPUs
+# threads = 5
+
+#################################
+# Backends Configuration
+#################################
+# You can define multiple backends using [[backends]] blocks.
+# Each backend must have a unique URL prefix.
+
+# Local filesystem backend
+[[backends]]
+prefix = "local"                      # URL prefix to access this backend
+type = "fs"                           # Backend type
+root = "/data/images"                 # Root directory
+
+# Amazon S3 backend (optional)
+# [[backends]]
+# prefix = "s3"
+# type = "s3"
+# bucket = "my-bucket"
+# region = "us-east-1"
+# access_key = "ACCESS_KEY"
+# secret_key = "SECRET_KEY"
+# endpoint = "https://s3.example.com"   # Optional custom endpoint
+
+# HTTP backend (optional)
+# [[backends]]
+# prefix = "remote"
+# type = "http"
+# root = "https://example.com/assets"
+# unix_socket = "/var/run/custom.sock"  # Optional Unix socket
