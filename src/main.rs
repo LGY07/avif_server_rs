@@ -62,7 +62,7 @@ async fn main() -> anyhow::Result<()> {
     let ttl = server_config.cache_ttl_secs;
     let max_bytes = server_config.cache_max_bytes();
     tokio::spawn(async move {
-        let mut interval = interval(Duration::from_secs(ttl));
+        let mut interval = interval(Duration::from_secs(if ttl < 10 { ttl } else { 10 }));
         loop {
             interval.tick().await;
             cache::clean_cache_dir(&cache_dir, ttl, max_bytes, cache_enabled);
