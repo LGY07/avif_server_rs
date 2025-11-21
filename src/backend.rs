@@ -1,8 +1,8 @@
 use crate::config::{BackendConfig, BackendKind};
 use opendal::Operator;
+use opendal::layers::HttpClientLayer;
 use opendal::services;
 use std::collections::HashMap;
-use opendal::layers::HttpClientLayer;
 
 #[derive(Clone)]
 pub struct BackendManager {
