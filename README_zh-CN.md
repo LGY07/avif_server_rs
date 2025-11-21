@@ -80,7 +80,7 @@ thread = 5
 [[backends]]
 prefix = "local"
 type = "fs"
-root = "C:\\Users\\Tuxium\\CLionProjects\\ros-bot\\data\\chat\\image"
+root = "./image"
 
 # 可选 S3 后端
 # [[backends]]
