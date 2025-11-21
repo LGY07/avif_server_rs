@@ -16,7 +16,7 @@ cache_enabled = true
 cache_dir = "./cache"
 
 # Cache Time-To-Live in seconds
-cache_ttl_secs = 3600
+cache_ttl_secs = 604800
 
 # Maximum total cache size in MB
 cache_max_mb = 1024
