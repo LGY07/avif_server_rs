@@ -2,6 +2,7 @@ use crate::config::{BackendConfig, BackendKind};
 use opendal::Operator;
 use opendal::services;
 use std::collections::HashMap;
+use opendal::layers::HttpClientLayer;
 
 #[derive(Clone)]
 pub struct BackendManager {
@@ -40,11 +41,12 @@ impl BackendManager {
                             use reqwest::Client;
                             let client = Client::builder()
                                 .connect_timeout(std::time::Duration::from_secs(10))
-                                .unix_socket(sock_path)
+                                .unix_socket(sock_path.to_owned())
                                 .build()?;
+                            let op_client = opendal::raw::HttpClient::with(client);
                             Operator::new(services::Http::default().root(root))?
-                                .layer(client)
                                 .finish()
+                                .layer(HttpClientLayer::new(op_client))
                         }
 
                         #[cfg(not(target_family = "unix"))]

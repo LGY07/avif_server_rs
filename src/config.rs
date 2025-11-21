@@ -1,5 +1,5 @@
 use serde::Deserialize;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct ServerConfig {
@@ -51,7 +51,7 @@ pub enum BackendKind {
     #[serde(rename = "http")]
     Http {
         root: String,
-        unix_socket: Option<String>,
+        unix_socket: Option<PathBuf>,
     },
 }
 
