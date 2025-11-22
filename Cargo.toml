@@ -15,8 +15,7 @@ blake3 = "1.8"
 clap = { version = "4.5", features = ["derive"] }
 image = { version = "0.25", features = ["rayon"] }
 opendal = { version = "0.55", features = ["services-fs", "services-http", "services-s3"] }
-# 默认不启用 SIMD 加速
-ravif = "0.12"
+ravif = { version = "0.12", features = ["asm"] }
 reqwest = "0.12"
 rgb = "0.8"
 serde = "1.0"
