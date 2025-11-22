@@ -32,7 +32,7 @@ default_format = "avif"
 
 # Quality of AVIF encoding (0-100)
 # Higher values improve image quality but increase file size.
-quality = 60
+quality = 80
 
 # Speed of AVIF encoding (0-10)
 # 0 = slowest / best compression

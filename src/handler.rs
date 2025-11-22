@@ -2,7 +2,8 @@ use crate::backend::BackendManager;
 use crate::cache;
 use crate::config::{AvifConfig, ServerConfig};
 use actix_web::{HttpResponse, Responder, get, web};
-use image::{ExtendedColorType, ImageEncoder};
+use image::ExtendedColorType;
+use rgb::bytemuck::cast_slice;
 use std::fs;
 use std::path::Path;
 use std::sync::Arc;
@@ -84,8 +85,7 @@ pub async fn serve_image(
         let mut out_bytes = Vec::new();
         match format.as_str() {
             "webp" => {
-                let encoder = image::codecs::webp::WebPEncoder::new_lossless(&mut out_bytes);
-                encoder.encode(
+                image::codecs::webp::WebPEncoder::new_lossless(&mut out_bytes).encode(
                     &img.to_rgba8(),
                     img.width(),
                     img.height(),
@@ -93,23 +93,20 @@ pub async fn serve_image(
                 )?;
             }
             "avif" => {
-                let encoder = image::codecs::avif::AvifEncoder::new_with_speed_quality(
-                    &mut out_bytes,
-                    avif_config.speed,
-                    avif_config.quality,
-                )
-                .with_num_threads(avif_config.thread);
-                encoder.write_image(
-                    &img.to_rgba8(),
-                    img.width(),
-                    img.height(),
-                    ExtendedColorType::Rgba8,
-                )?;
+                out_bytes = ravif::Encoder::new()
+                    .with_num_threads(avif_config.thread)
+                    .with_quality(avif_config.quality as f32)
+                    .with_speed(avif_config.speed)
+                    .encode_rgba(ravif::Img::new(
+                        cast_slice(img.to_rgba8().as_raw()),
+                        img.width() as usize,
+                        img.height() as usize,
+                    ))?
+                    .avif_file;
             }
             _ => match &*server_config.default_format {
                 "webp" => {
-                    let encoder = image::codecs::webp::WebPEncoder::new_lossless(&mut out_bytes);
-                    encoder.encode(
+                    image::codecs::webp::WebPEncoder::new_lossless(&mut out_bytes).encode(
                         &img.to_rgba8(),
                         img.width(),
                         img.height(),
@@ -117,33 +114,29 @@ pub async fn serve_image(
                     )?;
                 }
                 "avif" => {
-                    let encoder = image::codecs::avif::AvifEncoder::new_with_speed_quality(
-                        &mut out_bytes,
-                        avif_config.speed,
-                        avif_config.quality,
-                    )
-                    .with_num_threads(avif_config.thread);
-                    encoder.write_image(
-                        &img.to_rgba8(),
-                        img.width(),
-                        img.height(),
-                        ExtendedColorType::Rgba8,
-                    )?;
+                    out_bytes = ravif::Encoder::new()
+                        .with_num_threads(avif_config.thread)
+                        .with_quality(avif_config.quality as f32)
+                        .with_speed(avif_config.speed)
+                        .encode_rgba(ravif::Img::new(
+                            cast_slice(img.to_rgba8().as_raw()),
+                            img.width() as usize,
+                            img.height() as usize,
+                        ))?
+                        .avif_file;
                 }
                 _ => {
                     warn!("The default format is not set. Use AVIF");
-                    let encoder = image::codecs::avif::AvifEncoder::new_with_speed_quality(
-                        &mut out_bytes,
-                        avif_config.speed,
-                        avif_config.quality,
-                    )
-                    .with_num_threads(avif_config.thread);
-                    encoder.write_image(
-                        &img.to_rgba8(),
-                        img.width(),
-                        img.height(),
-                        ExtendedColorType::Rgba8,
-                    )?;
+                    out_bytes = ravif::Encoder::new()
+                        .with_num_threads(avif_config.thread)
+                        .with_quality(avif_config.quality as f32)
+                        .with_speed(avif_config.speed)
+                        .encode_rgba(ravif::Img::new(
+                            cast_slice(img.to_rgba8().as_raw()),
+                            img.width() as usize,
+                            img.height() as usize,
+                        ))?
+                        .avif_file;
                 }
             },
         }

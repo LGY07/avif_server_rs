@@ -433,7 +433,9 @@ dependencies = [
  "clap",
  "image",
  "opendal",
+ "ravif",
  "reqwest",
+ "rgb",
  "serde",
  "tokio",
  "toml",
@@ -1816,6 +1818,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "nasm-rs"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "34f676553b60ccbb76f41f9ae8f2428dac3f259ff8f1c2468a174778d06a1af9"
+dependencies = [
+ "jobserver",
+ "log",
+]
+
+[[package]]
 name = "native-tls"
 version = "0.2.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2339,6 +2351,7 @@ dependencies = [
  "av1-grain",
  "bitstream-io",
  "built",
+ "cc",
  "cfg-if",
  "interpolate_name",
  "itertools",
@@ -2346,6 +2359,7 @@ dependencies = [
  "libfuzzer-sys",
  "log",
  "maybe-rayon",
+ "nasm-rs",
  "new_debug_unreachable",
  "noop_proc_macro",
  "num-derive",
@@ -2520,6 +2534,9 @@ name = "rgb"
 version = "0.8.52"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0c6a884d2998352bb4daf0183589aec883f16a6da1f4dde84d8e2e9a5409a1ce"
+dependencies = [
+ "bytemuck",
+]
 
 [[package]]
 name = "ring"
